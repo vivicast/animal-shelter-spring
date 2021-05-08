@@ -9,7 +9,7 @@ class AnimalShelterApplicationTests {
 
 	@Test
 	void contextLoads() {
-		String hello = "Hello World";
+		String hello = "Hello Worlds";
 		HelloWorld helloWorld = new HelloWorld();
 		Assertions.assertEquals(hello, helloWorld.home());
 	}

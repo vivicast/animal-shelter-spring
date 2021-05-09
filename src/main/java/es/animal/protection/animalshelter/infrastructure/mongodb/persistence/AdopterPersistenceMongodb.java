@@ -4,8 +4,10 @@ import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.persistence.AdopterPersistence;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.AdopterReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.entities.AdopterEntity;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+@Repository
 public class AdopterPersistenceMongodb implements AdopterPersistence {
 
     private AdopterReactive adopterReactive;

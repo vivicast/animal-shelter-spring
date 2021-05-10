@@ -23,4 +23,9 @@ public class AdopterService {
     public Mono<Adopter> read(String nif) {
         return this.adopterPersistence.readByNif(nif);
     }
+
+    public Mono<Adopter> update(String nif, Adopter adopter) {
+        return this.adopterPersistence.updateByNif(nif, adopter);
+
+    }
 }

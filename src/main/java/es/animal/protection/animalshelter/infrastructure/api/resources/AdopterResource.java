@@ -29,4 +29,10 @@ public class AdopterResource {
     Mono<Adopter> read(@PathVariable String nif){
         return this.adopterService.read(nif);
     }
+
+    @PutMapping(NIF)
+    Mono<Adopter> update(@PathVariable String nif, @Valid @RequestBody Adopter adopter){
+        return this.adopterService.update(nif, adopter);
+    }
+
 }

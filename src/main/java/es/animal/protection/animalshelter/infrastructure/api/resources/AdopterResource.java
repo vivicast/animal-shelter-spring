@@ -3,10 +3,7 @@ package es.animal.protection.animalshelter.infrastructure.api.resources;
 import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.service.AdopterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -15,6 +12,7 @@ import javax.validation.Valid;
 @RequestMapping(AdopterResource.ADOPTERS)
 public class AdopterResource {
     public static final String ADOPTERS = "/adopters";
+    public static final String NIF = "/{nif}";
 
     private AdopterService adopterService;
 
@@ -25,5 +23,10 @@ public class AdopterResource {
     @PostMapping(produces = {"application/json"})
     Mono<Adopter> create(@Valid @RequestBody Adopter adopter){
         return this.adopterService.create(adopter);
+    }
+
+    @GetMapping(NIF)
+    Mono<Adopter> read(@PathVariable String nif){
+        return this.adopterService.read(nif);
     }
 }

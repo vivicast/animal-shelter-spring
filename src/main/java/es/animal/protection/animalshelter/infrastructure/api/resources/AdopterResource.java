@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(AdopterResource.ADOPTERS)
 public class AdopterResource {
@@ -21,7 +23,7 @@ public class AdopterResource {
         this.adopterService = adopterService;
     }
     @PostMapping(produces = {"application/json"})
-    Mono<Adopter> create(@RequestBody Adopter adopter){
+    Mono<Adopter> create(@Valid @RequestBody Adopter adopter){
         return this.adopterService.create(adopter);
     }
 }

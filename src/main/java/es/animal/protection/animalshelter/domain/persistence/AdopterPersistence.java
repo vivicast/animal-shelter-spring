@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono;
 public interface AdopterPersistence {
 
     Mono<Adopter> create(Adopter adopter);
+    Mono<Adopter> readByNif(String nif);
+
 }

@@ -52,4 +52,13 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
                 })
                 .flatMap(adopterEnt -> Mono.just(adopterEnt.toAdopter()));
     }
+
+    @Override
+    public Mono<Void> deleteByNif(String nif) {
+        return this.adopterReactive.readByNif(nif)
+                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF "+ nif + " not found" )))
+                .flatMap(adopterEntity -> {
+                    return this.adopterReactive.delete(adopterEntity);
+                });
+    }
 }

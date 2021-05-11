@@ -34,5 +34,9 @@ public class AdopterResource {
     Mono<Adopter> update(@PathVariable String nif, @Valid @RequestBody Adopter adopter){
         return this.adopterService.update(nif, adopter);
     }
+    @DeleteMapping(NIF)
+    Mono<Void> delete(@PathVariable String nif){
+        return this.adopterService.delete(nif);
+    }
 
 }

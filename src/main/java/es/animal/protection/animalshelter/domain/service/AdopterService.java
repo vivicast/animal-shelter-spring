@@ -1,6 +1,5 @@
 package es.animal.protection.animalshelter.domain.service;
 
-import es.animal.protection.animalshelter.domain.exceptions.NotFoundException;
 import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.persistence.AdopterPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +26,9 @@ public class AdopterService {
     public Mono<Adopter> update(String nif, Adopter adopter) {
         return this.adopterPersistence.updateByNif(nif, adopter);
 
+    }
+
+    public Mono<Void> delete(String nif) {
+        return this.adopterPersistence.deleteByNif(nif);
     }
 }

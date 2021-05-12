@@ -4,6 +4,7 @@ import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.service.AdopterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class AdopterResource {
     public AdopterResource(AdopterService adopterService) {
         this.adopterService = adopterService;
     }
+
     @PostMapping(produces = {"application/json"})
     Mono<Adopter> create(@Valid @RequestBody Adopter adopter){
         return this.adopterService.create(adopter);
@@ -34,9 +36,15 @@ public class AdopterResource {
     Mono<Adopter> update(@PathVariable String nif, @Valid @RequestBody Adopter adopter){
         return this.adopterService.update(nif, adopter);
     }
+
     @DeleteMapping(NIF)
     Mono<Void> delete(@PathVariable String nif){
         return this.adopterService.delete(nif);
+    }
+
+    @GetMapping
+    Flux<Adopter> findAll() {
+        return this.adopterService.findAll();
     }
 
 }

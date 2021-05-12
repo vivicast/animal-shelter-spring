@@ -8,6 +8,7 @@ import es.animal.protection.animalshelter.infrastructure.mongodb.daos.AdopterRea
 import es.animal.protection.animalshelter.infrastructure.mongodb.entities.AdopterEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -60,5 +61,11 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
                 .flatMap(adopterEntity -> {
                     return this.adopterReactive.delete(adopterEntity);
                 });
+    }
+
+    @Override
+    public Flux<Adopter> findAll() {
+        return this.adopterReactive.findAll()
+                .map(AdopterEntity::toAdopter);
     }
 }

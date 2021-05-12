@@ -11,6 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -41,6 +42,7 @@ class AdopterResourcesIT {
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT);
     }
+
     @Test
     void testRead() {
         Adopter adopter = Adopter.builder().nif("0000008C").name("John Smith").address("Av. Hilton").birthDay("1999/05/24").build();
@@ -63,6 +65,7 @@ class AdopterResourcesIT {
                     assertThat("Av. Hilton").isEqualTo(returnAdopter.getAddress());
                 });
     }
+
     @Test
     void testUpdate() {
         Adopter adopter = Adopter.builder().nif("0000007C").name("Pauler Smith").address("Av. Hilton").birthDay("1999/05/24").build();
@@ -86,6 +89,7 @@ class AdopterResourcesIT {
                     assertThat("Paul Smith").isEqualTo(returnAdopter.getName());
                 });
     }
+
     @Test
     void testDelete() {
         Adopter adopter = Adopter.builder().nif("0000006C").name("Brad James").address("Av. Hilton").birthDay("1999/05/24").build();
@@ -108,5 +112,18 @@ class AdopterResourcesIT {
                 .exchange()
                 .expectStatus().isNotFound();
 
+    }
+
+    @Test
+    void testFindAll() {
+        this.webTestClient
+                .get()
+                .uri(AdopterResource.ADOPTERS)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Adopter.class)
+                .value(adopters -> assertTrue(adopters.stream().allMatch(
+                        adopter -> adopter.getNif() != null
+                )));
     }
 }

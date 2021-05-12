@@ -4,6 +4,7 @@ import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.persistence.AdopterPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -30,5 +31,9 @@ public class AdopterService {
 
     public Mono<Void> delete(String nif) {
         return this.adopterPersistence.deleteByNif(nif);
+    }
+
+    public Flux<Adopter> findAll() {
+        return this.adopterPersistence.findAll();
     }
 }

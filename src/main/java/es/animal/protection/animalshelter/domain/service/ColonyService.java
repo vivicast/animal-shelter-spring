@@ -20,15 +20,15 @@ public class ColonyService {
         return this.colonyPersistence.create(colony);
     }
 
-    public Mono<Colony> read(String registry) {
+    public Mono<Colony> read(Integer registry) {
         return this.colonyPersistence.readByRegistry(registry);
     }
 
-    public Mono<Colony> update(String registry, Colony colony) {
+    public Mono<Colony> update(Integer registry, Colony colony) {
         return this.colonyPersistence.updateByRegistry(registry, colony);
     }
 
-    public Mono<Void> delete(String registry) {
+    public Mono<Void> delete(Integer registry) {
         return this.colonyPersistence.deleteByRegistry(registry);
     }
 }

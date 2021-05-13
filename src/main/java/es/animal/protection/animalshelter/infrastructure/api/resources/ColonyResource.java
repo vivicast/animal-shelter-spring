@@ -27,16 +27,16 @@ public class ColonyResource {
     }
 
     @GetMapping(REGISTRY)
-    Mono<Colony> read(@PathVariable String registry){
+    Mono<Colony> read(@PathVariable Integer registry){
         return this.colonyService.read(registry);
     }
 
     @PutMapping(REGISTRY)
-    Mono<Colony> update(@PathVariable String registry, @Valid @RequestBody Colony colony){
+    Mono<Colony> update(@PathVariable Integer registry, @Valid @RequestBody Colony colony){
         return this.colonyService.update(registry, colony);
     }
     @DeleteMapping(REGISTRY)
-    Mono<Void> delete(@PathVariable String registry){
+    Mono<Void> delete(@PathVariable Integer registry){
         return this.colonyService.delete(registry);
     }
 

@@ -5,5 +5,5 @@ import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import reactor.core.publisher.Mono;
 
 public interface ColonyReactive extends ReactiveSortingRepository <ColonyEntity, String>{
-    Mono<ColonyEntity> readByRegistry(String registryNumber);
+    Mono<ColonyEntity> readByRegistry(Integer registryNumber);
 }

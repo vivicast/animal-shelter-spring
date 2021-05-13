@@ -23,4 +23,8 @@ public class ColonyService {
     public Mono<Colony> read(String registry) {
         return this.colonyPersistence.readByRegistry(registry);
     }
+
+    public Mono<Colony> update(String registry, Colony colony) {
+        return this.colonyPersistence.updateByRegistry(registry, colony);
+    }
 }

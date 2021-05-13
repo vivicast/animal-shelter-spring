@@ -10,4 +10,6 @@ public interface ColonyPersistence {
     Mono<Colony> create(Colony colony);
 
     Mono<Colony> readByRegistry(String registry);
+
+    Mono<Colony> updateByRegistry(String registry, Colony colony);
 }

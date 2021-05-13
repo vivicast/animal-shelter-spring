@@ -30,4 +30,9 @@ public class ColonyResource {
     Mono<Colony> read(@PathVariable String registry){
         return this.colonyService.read(registry);
     }
+
+    @PutMapping(REGISTRY)
+    Mono<Colony> update(@PathVariable String registry, @Valid @RequestBody Colony colony){
+        return this.colonyService.update(registry, colony);
+    }
 }

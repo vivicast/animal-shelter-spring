@@ -7,6 +7,7 @@ import es.animal.protection.animalshelter.domain.persistence.AdopterPersistence;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.AdopterReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.entities.AdopterEntity;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,6 +17,7 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
 
     private AdopterReactive adopterReactive;
 
+    @Autowired
     public AdopterPersistenceMongodb(AdopterReactive adopterReactive) {
         this.adopterReactive = adopterReactive;
     }
@@ -58,9 +60,7 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
     public Mono<Void> deleteByNif(String nif) {
         return this.adopterReactive.readByNif(nif)
                 .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF "+ nif + " not found" )))
-                .flatMap(adopterEntity -> {
-                    return this.adopterReactive.delete(adopterEntity);
-                });
+                .flatMap(adopterEntity -> this.adopterReactive.delete(adopterEntity));
     }
 
     @Override

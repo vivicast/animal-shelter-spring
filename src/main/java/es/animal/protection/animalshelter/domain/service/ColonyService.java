@@ -20,4 +20,7 @@ public class ColonyService {
         return this.colonyPersistence.create(colony);
     }
 
+    public Mono<Colony> read(String registry) {
+        return this.colonyPersistence.readByRegistry(registry);
+    }
 }

@@ -8,4 +8,6 @@ import reactor.core.publisher.Mono;
 public interface ColonyPersistence {
 
     Mono<Colony> create(Colony colony);
+
+    Mono<Colony> readByRegistry(String registry);
 }

@@ -12,4 +12,6 @@ public interface ColonyPersistence {
     Mono<Colony> readByRegistry(String registry);
 
     Mono<Colony> updateByRegistry(String registry, Colony colony);
+
+    Mono<Void> deleteByRegistry(String registry);
 }

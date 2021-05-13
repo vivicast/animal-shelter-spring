@@ -48,12 +48,18 @@ public class ColonyPersistenceMongodb implements ColonyPersistence {
                 .flatMap(colonyEnt -> Mono.just(colonyEnt.toColony()));
     }
 
+    @Override
+    public Mono<Void> deleteByRegistry(String registry) {
+        return this.colonyReactive.readByRegistry(registry)
+                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry "+ registry + " not found" )))
+                .flatMap(adopterEntity -> this.colonyReactive.delete(adopterEntity));
+
+    }
+
     private Mono<Void> assertColonyNotExist(String registryNumber) {
         return this.colonyReactive.readByRegistry(registryNumber)
                 .flatMap(adopterEntity -> Mono.error(
                         new ConflictException("Colony with number registry "+ registryNumber + " already exists ")
                 ));
     }
-
-
 }

@@ -27,4 +27,8 @@ public class ColonyService {
     public Mono<Colony> update(String registry, Colony colony) {
         return this.colonyPersistence.updateByRegistry(registry, colony);
     }
+
+    public Mono<Void> delete(String registry) {
+        return this.colonyPersistence.deleteByRegistry(registry);
+    }
 }

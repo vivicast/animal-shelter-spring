@@ -35,4 +35,9 @@ public class ColonyResource {
     Mono<Colony> update(@PathVariable String registry, @Valid @RequestBody Colony colony){
         return this.colonyService.update(registry, colony);
     }
+    @DeleteMapping(REGISTRY)
+    Mono<Void> delete(@PathVariable String registry){
+        return this.colonyService.delete(registry);
+    }
+
 }

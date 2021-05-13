@@ -1,6 +1,6 @@
 package es.animal.protection.animalshelter.infrastructure.mongodb.entities;
 
-import es.animal.protection.animalshelter.domain.model.Adopter;
+import es.animal.protection.animalshelter.domain.model.Colony;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,22 +15,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document
 @Builder
-public class AdopterEntity {
+public class ColonyEntity {
     @Id
     private String id;
-    private String name;
     @Indexed(unique = true)
-    private String nif;
-    private String address;
-    private String birthDay;
+    private String registry;
+    private String manager;
+    private Integer phone;
+    private String location;
 
-    public AdopterEntity (Adopter adopter){
-        BeanUtils.copyProperties(adopter, this);
+    public ColonyEntity(Colony colony){
+        BeanUtils.copyProperties(colony, this);
     }
 
-    public Adopter toAdopter(){
-        Adopter adopter = new Adopter();
-        BeanUtils.copyProperties(this, adopter);
-        return adopter;
+    public Colony toColony(){
+        Colony colony = new Colony();
+        BeanUtils.copyProperties(this, colony);
+        return colony;
     }
 }

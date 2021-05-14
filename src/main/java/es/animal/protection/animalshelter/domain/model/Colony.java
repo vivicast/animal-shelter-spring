@@ -13,9 +13,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class Colony {
     @NotNull
-    private String registry;
+    private Integer registry;
     @NotNull
     private String manager;
-    private Integer phone;
+    private String phone;
     private String location;
 }

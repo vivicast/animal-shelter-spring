@@ -19,9 +19,9 @@ public class ColonyEntity {
     @Id
     private String id;
     @Indexed(unique = true)
-    private String registry;
+    private Integer registry;
     private String manager;
-    private Integer phone;
+    private String phone;
     private String location;
 
     public ColonyEntity(Colony colony){

@@ -4,6 +4,7 @@ import es.animal.protection.animalshelter.domain.model.Colony;
 import es.animal.protection.animalshelter.domain.persistence.ColonyPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -20,15 +21,19 @@ public class ColonyService {
         return this.colonyPersistence.create(colony);
     }
 
-    public Mono<Colony> read(String registry) {
+    public Mono<Colony> read(Integer registry) {
         return this.colonyPersistence.readByRegistry(registry);
     }
 
-    public Mono<Colony> update(String registry, Colony colony) {
+    public Mono<Colony> update(Integer registry, Colony colony) {
         return this.colonyPersistence.updateByRegistry(registry, colony);
     }
 
-    public Mono<Void> delete(String registry) {
+    public Mono<Void> delete(Integer registry) {
         return this.colonyPersistence.deleteByRegistry(registry);
+    }
+
+    public Flux<Colony> findByManagerAndLocationNullSafe(String manager, String location) {
+        return this.colonyPersistence.findByManagerAndLocationNullSafe(manager, location);
     }
 }

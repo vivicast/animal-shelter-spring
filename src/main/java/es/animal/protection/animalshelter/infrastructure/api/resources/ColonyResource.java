@@ -4,6 +4,7 @@ import es.animal.protection.animalshelter.domain.model.Colony;
 import es.animal.protection.animalshelter.domain.service.ColonyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -22,22 +23,29 @@ public class ColonyResource {
     }
 
     @PostMapping(produces = {"application/json"})
-    Mono<Colony> create(@Valid @RequestBody Colony colony){
+    Mono<Colony> create(@Valid @RequestBody Colony colony) {
         return this.colonyService.create(colony);
     }
 
     @GetMapping(REGISTRY)
-    Mono<Colony> read(@PathVariable Integer registry){
+    Mono<Colony> read(@PathVariable Integer registry) {
         return this.colonyService.read(registry);
     }
 
     @PutMapping(REGISTRY)
-    Mono<Colony> update(@PathVariable Integer registry, @Valid @RequestBody Colony colony){
+    Mono<Colony> update(@PathVariable Integer registry, @Valid @RequestBody Colony colony) {
         return this.colonyService.update(registry, colony);
     }
+
     @DeleteMapping(REGISTRY)
-    Mono<Void> delete(@PathVariable Integer registry){
+    Mono<Void> delete(@PathVariable Integer registry) {
         return this.colonyService.delete(registry);
     }
 
+    @GetMapping
+    Flux<Colony> findByManagerAndLocationNullSafe(
+            @RequestParam(required = false) String manager,
+            @RequestParam(required = false) String location) {
+        return this.colonyService.findByManagerAndLocationNullSafe(manager, location);
+    }
 }

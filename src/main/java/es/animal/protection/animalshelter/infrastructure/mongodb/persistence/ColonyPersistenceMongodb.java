@@ -9,6 +9,7 @@ import es.animal.protection.animalshelter.infrastructure.mongodb.entities.Colony
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -54,6 +55,12 @@ public class ColonyPersistenceMongodb implements ColonyPersistence {
                 .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry "+ registry + " not found" )))
                 .flatMap(adopterEntity -> this.colonyReactive.delete(adopterEntity));
 
+    }
+
+    @Override
+    public Flux<Colony> findByManagerAndLocationNullSafe(String manager, String location) {
+        return this.colonyReactive.findByManagerAndLocationNullSafe(manager, location)
+                .map(ColonyEntity::toColony);
     }
 
     private Mono<Void> assertColonyNotExist(Integer registryNumber) {

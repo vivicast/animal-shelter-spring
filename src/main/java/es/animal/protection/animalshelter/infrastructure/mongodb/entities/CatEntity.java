@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -27,14 +28,27 @@ public class CatEntity {
     private String admissionDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String departureDate;
+    @DBRef(lazy = true)
+    private AdopterEntity adopterEntity;
 
     public CatEntity(Cat cat){
         BeanUtils.copyProperties(cat, this);
+    }
+    public CatEntity(CatEntity catEntity, AdopterEntity adopterEntity){
+        BeanUtils.copyProperties(adopterEntity, this.adopterEntity);
+        BeanUtils.copyProperties(catEntity, this);
+        //this.id = catEntity.getId();
     }
 
     public Cat toCat(){
         Cat cat = new Cat();
         BeanUtils.copyProperties(this, cat);
+        return cat;
+    }
+    public Cat toCatWithAdoption(){
+        Cat cat = new Cat();
+        BeanUtils.copyProperties(this, cat);
+        cat.setNifAdopter(this.getAdopterEntity().getNif());
         return cat;
     }
 }

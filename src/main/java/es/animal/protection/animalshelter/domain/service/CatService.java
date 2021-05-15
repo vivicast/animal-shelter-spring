@@ -1,7 +1,6 @@
 package es.animal.protection.animalshelter.domain.service;
 
 import es.animal.protection.animalshelter.domain.model.Cat;
-import es.animal.protection.animalshelter.domain.model.Colony;
 import es.animal.protection.animalshelter.domain.persistence.CatPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +22,13 @@ public class CatService {
 
     public Mono<Cat> read(Integer chip) {
         return this.catPersistence.read(chip);
+    }
+
+    public Mono<Cat> update(Integer chip, Cat cat) {
+        return this.catPersistence.update(chip, cat);
+    }
+
+    public Mono<Void> delete(Integer chip) {
+        return this.catPersistence.delete(chip);
     }
 }

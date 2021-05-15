@@ -6,6 +6,7 @@ import es.animal.protection.animalshelter.domain.model.Cat;
 import es.animal.protection.animalshelter.domain.persistence.CatPersistence;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.CatReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.entities.CatEntity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -29,9 +30,27 @@ public class CatPersistenceMongodb implements CatPersistence {
 
     @Override
     public Mono<Cat> read(Integer chip) {
-        return this.catReactive.readByChip(chip)
-                .switchIfEmpty(Mono.error(new NotFoundException("Cat with chip " + chip + " no found")))
+        return this.assertCatExist(chip)
                 .flatMap(catEntity -> Mono.just(catEntity.toCat()));
+    }
+
+    @Override
+    public Mono<Cat> update(Integer chip, Cat cat) {
+        return this.assertCatExist(chip)
+                .flatMap(catEntity -> {
+                    CatEntity catEntityUpdate = new CatEntity();
+                    BeanUtils.copyProperties(cat, catEntityUpdate);
+                    catEntityUpdate.setId(catEntity.getId());
+                    return this.catReactive.save(catEntityUpdate);
+                })
+                .flatMap(catEnt -> Mono.just(catEnt.toCat()));
+    }
+
+    @Override
+    public Mono<Void> delete(Integer chip) {
+        return this.assertCatExist(chip)
+                .flatMap(catEntity -> this.catReactive.delete(catEntity));
+
     }
 
     private Mono<Void> assertCatNotExist(Integer chip) {
@@ -39,5 +58,9 @@ public class CatPersistenceMongodb implements CatPersistence {
                 .flatMap(catEntity -> Mono.error(
                         new ConflictException("Cat with chip " + chip + " already exists ")
                 ));
+    }
+    private Mono<CatEntity> assertCatExist(Integer chip) {
+        return this.catReactive.readByChip(chip)
+                .switchIfEmpty(Mono.error(new NotFoundException("Colony with chip "+ chip + " not found" )));
     }
 }

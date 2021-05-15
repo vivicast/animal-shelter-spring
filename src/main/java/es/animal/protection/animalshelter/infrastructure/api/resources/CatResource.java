@@ -31,5 +31,13 @@ public class CatResource {
         return this.catService.read(chip);
     }
 
+    @PutMapping(CHIP)
+    Mono<Cat> update(@PathVariable Integer chip, @Valid @RequestBody Cat cat) {
+        return this.catService.update(chip, cat);
+    }
+    @DeleteMapping(CHIP)
+    Mono<Void> delete(@PathVariable Integer chip) {
+        return this.catService.delete(chip);
+    }
 
 }

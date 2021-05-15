@@ -9,6 +9,7 @@ import es.animal.protection.animalshelter.infrastructure.mongodb.entities.CatEnt
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -51,6 +52,17 @@ public class CatPersistenceMongodb implements CatPersistence {
         return this.assertCatExist(chip)
                 .flatMap(catEntity -> this.catReactive.delete(catEntity));
 
+    }
+
+    @Override
+    public Flux<Cat> findBySociableIsTrueAndDepartureDateIsNull(boolean onlyAdoptable) {
+        if(onlyAdoptable){
+            return this.catReactive.findBySociableIsTrueAndDepartureDateIsNull()
+                    .map(catEntity -> catEntity.toCat());
+        }else{
+            return this.catReactive.findAll()
+                    .map(catEntity -> catEntity.toCat());
+        }
     }
 
     private Mono<Void> assertCatNotExist(Integer chip) {

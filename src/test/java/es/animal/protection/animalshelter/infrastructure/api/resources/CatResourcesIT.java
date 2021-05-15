@@ -1,6 +1,8 @@
 package es.animal.protection.animalshelter.infrastructure.api.resources;
 
+import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.model.Cat;
+import es.animal.protection.animalshelter.infrastructure.api.dtos.AdoptionDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -10,6 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -165,4 +168,39 @@ class CatResourcesIT {
                                 && catsAdoptables.getDepartureDate() == null
                 )));
     }
+
+    @Test
+    void testCreateAdoption() {
+        Cat cat = Cat.builder().chip(8).name("Fenix").admissionDate("2021-01-02").sociable(true).build();
+        this.webTestClient
+                .post()
+                .uri(CatResource.CATS)
+                .body(Mono.just(cat), Cat.class)
+                .exchange()
+                .expectStatus().isOk();
+
+        Adopter adopter = Adopter.builder().nif("5555").name("Mary Smith").address("Av. Hollywood").birthDay("1989/05/24").build();
+        this.webTestClient
+                .post()
+                .uri(AdopterResource.ADOPTERS)
+                .body(Mono.just(adopter), Adopter.class)
+                .exchange()
+                .expectStatus().isOk();
+
+        AdoptionDto adoptionDto = AdoptionDto.builder().chip(8).nifAdopter("5555").build();
+        this.webTestClient
+                .post()
+                .uri(CatResource.CATS+CatResource.ADOPTION)
+                .body(Mono.just(adoptionDto), AdoptionDto.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Cat.class)
+                .value(returnCat -> {
+                    assertThat("5555").isEqualTo(returnCat.getNifAdopter());
+                    assertNotNull(returnCat.getDepartureDate());
+                });
+
+    }
+
+
 }

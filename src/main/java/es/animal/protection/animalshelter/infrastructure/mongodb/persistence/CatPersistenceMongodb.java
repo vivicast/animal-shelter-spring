@@ -43,14 +43,10 @@ public class CatPersistenceMongodb implements CatPersistence {
 
     @Override
     public Mono<Cat> update(Integer chip, Cat cat) {
-        LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()");
-        LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()" + cat.getAdopterNif());
 
         if (cat.getAdopterNif() == null) {
-            LogManager.getLogger(this.getClass()).warn("AnimalShelter: getNifAdopter is Empty");
             return this.updateCat(chip, cat);
         } else {
-            LogManager.getLogger(this.getClass()).warn("AnimalShelter: getNifAdopter NOT is Empty");
             return this.createAdoption(chip, cat);
         }
     }
@@ -98,7 +94,7 @@ public class CatPersistenceMongodb implements CatPersistence {
                     });
                 })
                 .flatMap(catEntity -> this.catReactive.save(catEntity))
-                .flatMap(catEntitySaved -> Mono.just(catEntitySaved.toCatWithAdoption()));
+                .flatMap(catEntitySaved -> Mono.just(catEntitySaved.toCat()));
     }
 
     private Mono<Void> assertCatNotExist(Integer chip) {

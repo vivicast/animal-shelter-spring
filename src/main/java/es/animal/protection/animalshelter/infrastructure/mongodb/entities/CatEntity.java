@@ -30,6 +30,8 @@ public class CatEntity {
     private String departureDate;
     @DBRef(lazy = true)
     private AdopterEntity adopterEntity;
+    @DBRef(lazy = true)
+    private ColonyEntity colonyEntity;
 
     public CatEntity(Cat cat) {
         BeanUtils.copyProperties(cat, this);
@@ -45,6 +47,8 @@ public class CatEntity {
         BeanUtils.copyProperties(this, cat);
         if (this.adopterEntity != null) {
             cat.setAdopterNif(this.adopterEntity.getNif());
+        }else if(this.colonyEntity != null){
+            cat.setColonyRegistry(this.colonyEntity.getRegistry());
         }
         return cat;
     }

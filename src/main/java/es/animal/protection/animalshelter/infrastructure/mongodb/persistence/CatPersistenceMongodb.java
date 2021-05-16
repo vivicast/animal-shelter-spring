@@ -6,26 +6,26 @@ import es.animal.protection.animalshelter.domain.model.Cat;
 import es.animal.protection.animalshelter.domain.persistence.CatPersistence;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.AdopterReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.CatReactive;
+import es.animal.protection.animalshelter.infrastructure.mongodb.daos.ColonyReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.entities.CatEntity;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-
 @Repository
 public class CatPersistenceMongodb implements CatPersistence {
 
     private CatReactive catReactive;
     private AdopterReactive adopterReactive;
+    private ColonyReactive colonyReactive;
 
     @Autowired
-    public CatPersistenceMongodb(CatReactive catReactive, AdopterReactive adopterReactive) {
+    public CatPersistenceMongodb(CatReactive catReactive, ColonyReactive colonyReactive, AdopterReactive adopterReactive) {
         this.catReactive = catReactive;
-        this.adopterReactive = adopterReactive;
+        this.adopterReactive =adopterReactive;
+        this.colonyReactive = colonyReactive;
     }
 
     @Override
@@ -44,10 +44,12 @@ public class CatPersistenceMongodb implements CatPersistence {
     @Override
     public Mono<Cat> update(Integer chip, Cat cat) {
 
-        if (cat.getAdopterNif() == null) {
-            return this.updateCat(chip, cat);
-        } else {
+        if (cat.getAdopterNif() != null) {
             return this.createAdoption(chip, cat);
+        } else if (cat.getColonyRegistry() != null) {
+            return this.assignColony(chip, cat);
+        } else {
+            return this.updateCat(chip, cat);
         }
     }
 
@@ -76,6 +78,24 @@ public class CatPersistenceMongodb implements CatPersistence {
                     catEntityUpdate.setId(catEntity.getId());
                     return this.catReactive.save(catEntityUpdate);
                 }).flatMap(catEnt -> Mono.just(catEnt.toCat()));
+    }
+    private Mono<Cat> assignColony(Integer chip, Cat cat) {
+        Mono<CatEntity> catEntityMono = this.assertCatExist(chip);
+        return this.colonyReactive.readByRegistry(cat.getColonyRegistry())
+                .switchIfEmpty(Mono.error(
+                        new NotFoundException("No exist colony with registry: " + cat.getColonyRegistry())
+                ))
+                .flatMap(colonyEntity -> {
+                    return catEntityMono.map(catEntityActual -> {
+                        CatEntity catEntityUpdate = new CatEntity();
+                        BeanUtils.copyProperties(cat, catEntityUpdate);
+                        catEntityUpdate.setColonyEntity(colonyEntity);
+                        catEntityUpdate.setId(catEntityActual.getId());
+                        return catEntityUpdate;
+                    });
+                })
+                .flatMap(catEntity -> this.catReactive.save(catEntity))
+                .flatMap(catEntitySaved -> Mono.just(catEntitySaved.toCat()));
     }
 
     private Mono<Cat> createAdoption(Integer chip, Cat cat) {

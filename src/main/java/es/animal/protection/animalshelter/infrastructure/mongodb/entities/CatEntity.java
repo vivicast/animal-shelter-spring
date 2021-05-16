@@ -29,6 +29,7 @@ public class CatEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String departureDate;
     private AdopterEntity adopterEntity;
+    private ColonyEntity colonyEntity;
 
     public CatEntity(Cat cat) {
         BeanUtils.copyProperties(cat, this);
@@ -44,6 +45,8 @@ public class CatEntity {
         BeanUtils.copyProperties(this, cat);
         if (this.adopterEntity != null) {
             cat.setAdopterNif(this.adopterEntity.getNif());
+        }else if(this.colonyEntity != null){
+            cat.setColonyRegistry(this.colonyEntity.getRegistry());
         }
         return cat;
     }

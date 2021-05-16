@@ -2,7 +2,6 @@ package es.animal.protection.animalshelter.infrastructure.api.resources;
 
 import es.animal.protection.animalshelter.domain.model.Cat;
 import es.animal.protection.animalshelter.domain.service.CatService;
-import es.animal.protection.animalshelter.infrastructure.api.dtos.AdoptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -50,10 +49,4 @@ public class CatResource {
             @RequestParam(required = false) boolean onlyAdoptable) {
         return this.catService.findBySociableIsTrueAndDepartureDateIsNull(onlyAdoptable);
     }
-
-    @PostMapping(ADOPTION)
-    Mono<Cat> createAdoption(@Valid @RequestBody AdoptionDto adoptionDto) {
-        return this.catService.createAdoption(adoptionDto);
-    }
-
 }

@@ -2,7 +2,6 @@ package es.animal.protection.animalshelter.domain.service;
 
 import es.animal.protection.animalshelter.domain.model.Cat;
 import es.animal.protection.animalshelter.domain.persistence.CatPersistence;
-import es.animal.protection.animalshelter.infrastructure.api.dtos.AdoptionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -36,8 +35,5 @@ public class CatService {
 
     public Flux<Cat> findBySociableIsTrueAndDepartureDateIsNull(boolean onlyAdoptable) {
         return this.catPersistence.findBySociableIsTrueAndDepartureDateIsNull(onlyAdoptable);
-    }
-    public Mono<Cat> createAdoption(AdoptionDto adoptionDto) {
-        return this.catPersistence.createAdoption(adoptionDto);
     }
 }

@@ -30,6 +30,7 @@ public class CatEntity {
     private String departureDate;
     @DBRef(lazy = true)
     private AdopterEntity adopterEntity;
+    @DBRef(lazy = true)
     private ColonyEntity colonyEntity;
 
     public CatEntity(Cat cat) {

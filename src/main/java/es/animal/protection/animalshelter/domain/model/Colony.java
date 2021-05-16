@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class Colony {
     @NotNull
-    private Integer registry;
+    private String registry;
     @NotNull
     private String manager;
     private String phone;

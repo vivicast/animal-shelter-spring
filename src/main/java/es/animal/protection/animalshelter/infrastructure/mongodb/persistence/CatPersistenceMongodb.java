@@ -46,29 +46,15 @@ public class CatPersistenceMongodb implements CatPersistence {
         LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()");
         LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()" + cat.getAdopterNif());
 
+
+
+
         if (cat.getAdopterNif() == null) {
             LogManager.getLogger(this.getClass()).warn("AnimalShelter: getNifAdopter is Empty");
             return this.updateCat(chip, cat);
         } else {
             LogManager.getLogger(this.getClass()).warn("AnimalShelter: getNifAdopter NOT is Empty");
             return this.createAdoption(chip, cat);
-        }
-    }
-
-    @Override
-    public Mono<Void> delete(Integer chip) {
-        return this.assertCatExist(chip)
-                .flatMap(catEntity -> this.catReactive.delete(catEntity));
-    }
-
-    @Override
-    public Flux<Cat> findBySociableIsTrueAndDepartureDateIsNull(boolean onlyAdoptable) {
-        if (onlyAdoptable) {
-            return this.catReactive.findBySociableIsTrueAndDepartureDateIsNull()
-                    .map(catEntity -> catEntity.toCat());
-        } else {
-            return this.catReactive.findAll()
-                    .map(catEntity -> catEntity.toCat());
         }
     }
 
@@ -99,6 +85,23 @@ public class CatPersistenceMongodb implements CatPersistence {
                 })
                 .flatMap(catEntity -> this.catReactive.save(catEntity))
                 .flatMap(catEntitySaved -> Mono.just(catEntitySaved.toCatWithAdoption()));
+    }
+
+    @Override
+    public Mono<Void> delete(Integer chip) {
+        return this.assertCatExist(chip)
+                .flatMap(catEntity -> this.catReactive.delete(catEntity));
+    }
+
+    @Override
+    public Flux<Cat> findBySociableIsTrueAndDepartureDateIsNull(boolean onlyAdoptable) {
+        if (onlyAdoptable) {
+            return this.catReactive.findBySociableIsTrueAndDepartureDateIsNull()
+                    .map(catEntity -> catEntity.toCat());
+        } else {
+            return this.catReactive.findAll()
+                    .map(catEntity -> catEntity.toCat());
+        }
     }
 
     private Mono<Void> assertCatNotExist(Integer chip) {

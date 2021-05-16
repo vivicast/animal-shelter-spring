@@ -2,6 +2,7 @@ package es.animal.protection.animalshelter.infrastructure.api.resources;
 
 import es.animal.protection.animalshelter.domain.model.Colony;
 import es.animal.protection.animalshelter.domain.service.ColonyService;
+import es.animal.protection.animalshelter.infrastructure.api.dtos.ColonyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -13,7 +14,8 @@ import javax.validation.Valid;
 @RequestMapping(ColonyResource.COLONIES)
 public class ColonyResource {
     public static final String COLONIES = "/colonies";
-    public static final String REGISTRY = "/{registry}";
+    public static final String REGISTRY_VAL = "/{registry}";
+    public static final String REGISTRY = "/registry";
 
     private ColonyService colonyService;
 
@@ -27,18 +29,18 @@ public class ColonyResource {
         return this.colonyService.create(colony);
     }
 
-    @GetMapping(REGISTRY)
-    Mono<Colony> read(@PathVariable Integer registry) {
+    @GetMapping(REGISTRY_VAL)
+    Mono<Colony> read(@PathVariable String registry) {
         return this.colonyService.read(registry);
     }
 
-    @PutMapping(REGISTRY)
-    Mono<Colony> update(@PathVariable Integer registry, @Valid @RequestBody Colony colony) {
+    @PutMapping(REGISTRY_VAL)
+    Mono<Colony> update(@PathVariable String registry, @Valid @RequestBody Colony colony) {
         return this.colonyService.update(registry, colony);
     }
 
-    @DeleteMapping(REGISTRY)
-    Mono<Void> delete(@PathVariable Integer registry) {
+    @DeleteMapping(REGISTRY_VAL)
+    Mono<Void> delete(@PathVariable String registry) {
         return this.colonyService.delete(registry);
     }
 
@@ -47,5 +49,12 @@ public class ColonyResource {
             @RequestParam(required = false) String manager,
             @RequestParam(required = false) String location) {
         return this.colonyService.findByManagerAndLocationNullSafe(manager, location);
+    }
+
+    @GetMapping(REGISTRY)
+    Mono<ColonyDto> findByRegistryNullSafe(@RequestParam(required = false) String registry) {
+        return this.colonyService.findByRegistryNullSafe(registry)
+                .collectList()
+                .map(ColonyDto::new);
     }
 }

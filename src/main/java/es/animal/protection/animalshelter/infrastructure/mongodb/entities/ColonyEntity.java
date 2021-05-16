@@ -19,7 +19,7 @@ public class ColonyEntity {
     @Id
     private String id;
     @Indexed(unique = true)
-    private Integer registry;
+    private String registry;
     private String manager;
     private String phone;
     private String location;

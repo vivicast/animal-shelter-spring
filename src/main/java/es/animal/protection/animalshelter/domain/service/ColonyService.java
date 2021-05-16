@@ -21,19 +21,23 @@ public class ColonyService {
         return this.colonyPersistence.create(colony);
     }
 
-    public Mono<Colony> read(Integer registry) {
+    public Mono<Colony> read(String registry) {
         return this.colonyPersistence.readByRegistry(registry);
     }
 
-    public Mono<Colony> update(Integer registry, Colony colony) {
+    public Mono<Colony> update(String registry, Colony colony) {
         return this.colonyPersistence.updateByRegistry(registry, colony);
     }
 
-    public Mono<Void> delete(Integer registry) {
+    public Mono<Void> delete(String registry) {
         return this.colonyPersistence.deleteByRegistry(registry);
     }
 
     public Flux<Colony> findByManagerAndLocationNullSafe(String manager, String location) {
         return this.colonyPersistence.findByManagerAndLocationNullSafe(manager, location);
+    }
+
+    public Flux<String> findByRegistryNullSafe(String registry) {
+        return this.colonyPersistence.findByRegistryNullSafe(registry);
     }
 }

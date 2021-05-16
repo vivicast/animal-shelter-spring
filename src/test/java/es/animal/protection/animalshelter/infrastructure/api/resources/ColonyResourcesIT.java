@@ -22,7 +22,7 @@ class ColonyResourcesIT {
 
     @Test
     void testCreateColony() {
-        Colony colony = Colony.builder().manager("mary").location("Av. Sol").registry(001).build();
+        Colony colony = Colony.builder().manager("mary").location("Av. Sol").registry("001").build();
         this.webTestClient
                 .post()
                 .uri(ColonyResource.COLONIES)
@@ -31,7 +31,7 @@ class ColonyResourcesIT {
                 .expectStatus().isOk()
                 .expectBody(Colony.class)
                 .value(returnColony -> {
-                    assertThat(001).isEqualTo(returnColony.getRegistry());
+                    assertThat("001").isEqualTo(returnColony.getRegistry());
                     assertThat("mary").isEqualTo(returnColony.getManager());
                 });
 
@@ -45,7 +45,7 @@ class ColonyResourcesIT {
 
     @Test
     void testRead() {
-        Colony colony = Colony.builder().manager("Jhon").location("Av. Tree").registry(002).build();
+        Colony colony = Colony.builder().manager("Jhon").location("Av. Tree").registry("002").build();
         this.webTestClient
                 .post()
                 .uri(ColonyResource.COLONIES)
@@ -55,25 +55,25 @@ class ColonyResourcesIT {
 
         this.webTestClient
                 .get()
-                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY, "002")
+                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY_VAL, "002")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Colony.class)
                 .value(returnColony -> {
-                    assertThat(002).isEqualTo(returnColony.getRegistry());
+                    assertThat("002").isEqualTo(returnColony.getRegistry());
                     assertThat("Jhon").isEqualTo(returnColony.getManager());
                 });
 
         this.webTestClient
                 .get()
-                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY, "003")
+                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY_VAL, "003")
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     void testUpdate() {
-        Colony colony = Colony.builder().manager("Helen").location("Av. Sky").registry(003).build();
+        Colony colony = Colony.builder().manager("Helen").location("Av. Sky").registry("003").build();
 
         this.webTestClient
                 .post()
@@ -82,23 +82,23 @@ class ColonyResourcesIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        Colony colonyUpdate = Colony.builder().manager("Chris Wall").location("Av. Sky").registry(003).build();
+        Colony colonyUpdate = Colony.builder().manager("Chris Wall").location("Av. Sky").registry("003").build();
 
         this.webTestClient
                 .put()
-                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY, "003")
+                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY_VAL, "003")
                 .body(Mono.just(colonyUpdate), Colony.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Colony.class)
                 .value(returnColony -> {
                     assertThat("Chris Wall").isEqualTo(returnColony.getManager());
-                    assertThat(003).isEqualTo(returnColony.getRegistry());
+                    assertThat("003").isEqualTo(returnColony.getRegistry());
                 });
 
         this.webTestClient
                 .put()
-                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY, "004")
+                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY_VAL, "004")
                 .body(Mono.just(colonyUpdate), Colony.class)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -106,7 +106,7 @@ class ColonyResourcesIT {
 
     @Test
     void testDelete() {
-        Colony colony = Colony.builder().manager("Helen").location("Av. Sky").registry(004).build();
+        Colony colony = Colony.builder().manager("Helen").location("Av. Sky").registry("004").build();
         this.webTestClient
                 .post()
                 .uri(ColonyResource.COLONIES)
@@ -116,21 +116,21 @@ class ColonyResourcesIT {
 
         this.webTestClient
                 .delete()
-                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY, "004")
+                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY_VAL, "004")
                 .exchange()
                 .expectStatus().isOk();
 
         this.webTestClient
                 .get()
-                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY, "004")
+                .uri(ColonyResource.COLONIES + ColonyResource.REGISTRY_VAL, "004")
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     void testFindByManagerAndLocationNullSafe() {
-        Colony colony1 = Colony.builder().manager("Sam").location("Av. Green").registry(005).build();
-        Colony colony2 = Colony.builder().manager("Sam").location("Av. Green").registry(006).build();
+        Colony colony1 = Colony.builder().manager("Sam").location("Av. Green").registry("005").build();
+        Colony colony2 = Colony.builder().manager("Sam").location("Av. Green").registry("006").build();
 
         this.webTestClient
                 .post()

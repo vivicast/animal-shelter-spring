@@ -25,5 +25,6 @@ public class Cat {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String departureDate;
     private String adopterNif;
+    private String colonyRegistry;
 
 }

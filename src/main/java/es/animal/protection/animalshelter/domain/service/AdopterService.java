@@ -16,7 +16,7 @@ public class AdopterService {
         this.adopterPersistence = adopterPersistence;
     }
 
-    public Mono<Adopter> create(Adopter adopter){
+    public Mono<Adopter> create(Adopter adopter) {
         return this.adopterPersistence.create(adopter);
     }
 

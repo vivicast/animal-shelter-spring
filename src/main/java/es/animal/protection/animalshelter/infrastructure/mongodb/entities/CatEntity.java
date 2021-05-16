@@ -28,26 +28,23 @@ public class CatEntity {
     private String admissionDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String departureDate;
-    @DBRef(lazy = true)
     private AdopterEntity adopterEntity;
 
-    public CatEntity(Cat cat){
+    public CatEntity(Cat cat) {
         BeanUtils.copyProperties(cat, this);
     }
-    public CatEntity(CatEntity catEntity, AdopterEntity adopterEntity){
+
+    public CatEntity(CatEntity catEntity, AdopterEntity adopterEntity) {
         BeanUtils.copyProperties(adopterEntity, this.adopterEntity);
         BeanUtils.copyProperties(catEntity, this);
     }
 
-    public Cat toCat(){
+    public Cat toCat() {
         Cat cat = new Cat();
         BeanUtils.copyProperties(this, cat);
-        return cat;
-    }
-    public Cat toCatWithAdoption(){
-        Cat cat = new Cat();
-        BeanUtils.copyProperties(this, cat);
-        cat.setAdopterNif(this.getAdopterEntity().getNif());
+        if (this.adopterEntity != null) {
+            cat.setAdopterNif(this.adopterEntity.getNif());
+        }
         return cat;
     }
 }

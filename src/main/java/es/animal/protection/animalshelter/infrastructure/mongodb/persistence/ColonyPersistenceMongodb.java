@@ -32,14 +32,14 @@ public class ColonyPersistenceMongodb implements ColonyPersistence {
     @Override
     public Mono<Colony> readByRegistry(Integer registry) {
         return this.colonyReactive.readByRegistry(registry)
-                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry "+ registry + " not found" )))
+                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry " + registry + " not found")))
                 .flatMap(colonyEntity -> Mono.just(colonyEntity.toColony()));
     }
 
     @Override
     public Mono<Colony> updateByRegistry(Integer registry, Colony colony) {
         return this.colonyReactive.readByRegistry(registry)
-                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry "+ registry + " not found" )))
+                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry " + registry + " not found")))
                 .flatMap(colonyEntity -> {
                     ColonyEntity colonyEntityUpdate = new ColonyEntity();
                     BeanUtils.copyProperties(colony, colonyEntityUpdate);
@@ -52,7 +52,7 @@ public class ColonyPersistenceMongodb implements ColonyPersistence {
     @Override
     public Mono<Void> deleteByRegistry(Integer registry) {
         return this.colonyReactive.readByRegistry(registry)
-                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry "+ registry + " not found" )))
+                .switchIfEmpty(Mono.error(new NotFoundException("Colony with number registry " + registry + " not found")))
                 .flatMap(adopterEntity -> this.colonyReactive.delete(adopterEntity));
 
     }
@@ -66,7 +66,7 @@ public class ColonyPersistenceMongodb implements ColonyPersistence {
     private Mono<Void> assertColonyNotExist(Integer registryNumber) {
         return this.colonyReactive.readByRegistry(registryNumber)
                 .flatMap(adopterEntity -> Mono.error(
-                        new ConflictException("Colony with number registry "+ registryNumber + " already exists ")
+                        new ConflictException("Colony with number registry " + registryNumber + " already exists ")
                 ));
     }
 }

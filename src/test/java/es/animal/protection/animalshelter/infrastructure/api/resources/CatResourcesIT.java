@@ -56,7 +56,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .get()
-                .uri(CatResource.CATS+ CatResource.CHIP, "2")
+                .uri(CatResource.CATS + CatResource.CHIP, "2")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Cat.class)
@@ -67,7 +67,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .get()
-                .uri(CatResource.CATS+ CatResource.CHIP, "3")
+                .uri(CatResource.CATS + CatResource.CHIP, "3")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -86,7 +86,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(CatResource.CATS+ CatResource.CHIP, "3")
+                .uri(CatResource.CATS + CatResource.CHIP, "3")
                 .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isOk()
@@ -97,7 +97,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(CatResource.CATS+ CatResource.CHIP, "4")
+                .uri(CatResource.CATS + CatResource.CHIP, "4")
                 .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -115,13 +115,13 @@ class CatResourcesIT {
 
         this.webTestClient
                 .delete()
-                .uri(CatResource.CATS+ CatResource.CHIP, "4")
+                .uri(CatResource.CATS + CatResource.CHIP, "4")
                 .exchange()
                 .expectStatus().isOk();
 
         this.webTestClient
                 .get()
-                .uri(CatResource.CATS+ CatResource.CHIP, "4")
+                .uri(CatResource.CATS + CatResource.CHIP, "4")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -165,7 +165,7 @@ class CatResourcesIT {
                 .value(cats -> assertTrue(cats.stream()
                         .allMatch(catsAdoptables -> catsAdoptables.getSociable().equals(true)
                                 && catsAdoptables.getDepartureDate() == null
-                )));
+                        )));
     }
 
     @Test
@@ -190,7 +190,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(CatResource.CATS+ CatResource.CHIP, "8")
+                .uri(CatResource.CATS + CatResource.CHIP, "8")
                 .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isOk()
@@ -198,7 +198,6 @@ class CatResourcesIT {
                 .value(returnCat -> {
                     assertThat("5555").isEqualTo(returnCat.getAdopterNif());
                 });
-
 
 
     }

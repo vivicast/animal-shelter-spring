@@ -25,22 +25,22 @@ public class AdopterResource {
     }
 
     @PostMapping(produces = {"application/json"})
-    Mono<Adopter> create(@Valid @RequestBody Adopter adopter){
+    Mono<Adopter> create(@Valid @RequestBody Adopter adopter) {
         return this.adopterService.create(adopter);
     }
 
     @GetMapping(NIF_VAL)
-    Mono<Adopter> read(@PathVariable String nif){
+    Mono<Adopter> read(@PathVariable String nif) {
         return this.adopterService.read(nif);
     }
 
     @PutMapping(NIF_VAL)
-    Mono<Adopter> update(@PathVariable String nif, @Valid @RequestBody Adopter adopter){
+    Mono<Adopter> update(@PathVariable String nif, @Valid @RequestBody Adopter adopter) {
         return this.adopterService.update(nif, adopter);
     }
 
     @DeleteMapping(NIF_VAL)
-    Mono<Void> delete(@PathVariable String nif){
+    Mono<Void> delete(@PathVariable String nif) {
         return this.adopterService.delete(nif);
     }
 

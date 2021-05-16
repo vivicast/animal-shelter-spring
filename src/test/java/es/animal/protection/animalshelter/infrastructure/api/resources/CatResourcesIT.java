@@ -2,6 +2,7 @@ package es.animal.protection.animalshelter.infrastructure.api.resources;
 
 import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.model.Cat;
+import es.animal.protection.animalshelter.domain.model.Colony;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -56,7 +57,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .get()
-                .uri(CatResource.CATS+ CatResource.CHIP, "2")
+                .uri(CatResource.CATS + CatResource.CHIP, "2")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Cat.class)
@@ -67,7 +68,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .get()
-                .uri(CatResource.CATS+ CatResource.CHIP, "3")
+                .uri(CatResource.CATS + CatResource.CHIP, "3")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -86,7 +87,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(CatResource.CATS+ CatResource.CHIP, "3")
+                .uri(CatResource.CATS + CatResource.CHIP, "3")
                 .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isOk()
@@ -97,7 +98,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(CatResource.CATS+ CatResource.CHIP, "4")
+                .uri(CatResource.CATS + CatResource.CHIP, "4")
                 .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -115,13 +116,13 @@ class CatResourcesIT {
 
         this.webTestClient
                 .delete()
-                .uri(CatResource.CATS+ CatResource.CHIP, "4")
+                .uri(CatResource.CATS + CatResource.CHIP, "4")
                 .exchange()
                 .expectStatus().isOk();
 
         this.webTestClient
                 .get()
-                .uri(CatResource.CATS+ CatResource.CHIP, "4")
+                .uri(CatResource.CATS + CatResource.CHIP, "4")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -165,7 +166,7 @@ class CatResourcesIT {
                 .value(cats -> assertTrue(cats.stream()
                         .allMatch(catsAdoptables -> catsAdoptables.getSociable().equals(true)
                                 && catsAdoptables.getDepartureDate() == null
-                )));
+                        )));
     }
 
     @Test
@@ -190,7 +191,7 @@ class CatResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(CatResource.CATS+ CatResource.CHIP, "8")
+                .uri(CatResource.CATS + CatResource.CHIP, "8")
                 .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isOk()
@@ -199,6 +200,39 @@ class CatResourcesIT {
                     assertThat("5555").isEqualTo(returnCat.getAdopterNif());
                 });
 
+
+    }
+
+    @Test
+    void testAssignColony() {
+        Cat cat = Cat.builder().chip(9).name("Bob").admissionDate("2021-01-02").sociable(false).build();
+        this.webTestClient
+                .post()
+                .uri(CatResource.CATS)
+                .body(Mono.just(cat), Cat.class)
+                .exchange()
+                .expectStatus().isOk();
+
+        Colony colony = Colony.builder().manager("Marth").location("Av. Sol").registry(007).build();
+        this.webTestClient
+                .post()
+                .uri(ColonyResource.COLONIES)
+                .body(Mono.just(colony), Adopter.class)
+                .exchange()
+                .expectStatus().isOk();
+
+        Cat catUpdate = Cat.builder().chip(9).name("Bob").admissionDate("2021-01-02").sociable(false).departureDate("2021-05-17").colonyRegistry(007).build();
+
+        this.webTestClient
+                .put()
+                .uri(CatResource.CATS + CatResource.CHIP, "9")
+                .body(Mono.just(catUpdate), Cat.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Cat.class)
+                .value(returnCat -> {
+                    assertThat(007).isEqualTo(returnCat.getColonyRegistry());
+                });
 
 
     }

@@ -30,24 +30,26 @@ public class CatEntity {
     private String departureDate;
     @DBRef(lazy = true)
     private AdopterEntity adopterEntity;
+    @DBRef(lazy = true)
+    private ColonyEntity colonyEntity;
 
-    public CatEntity(Cat cat){
+    public CatEntity(Cat cat) {
         BeanUtils.copyProperties(cat, this);
     }
-    public CatEntity(CatEntity catEntity, AdopterEntity adopterEntity){
+
+    public CatEntity(CatEntity catEntity, AdopterEntity adopterEntity) {
         BeanUtils.copyProperties(adopterEntity, this.adopterEntity);
         BeanUtils.copyProperties(catEntity, this);
     }
 
-    public Cat toCat(){
+    public Cat toCat() {
         Cat cat = new Cat();
         BeanUtils.copyProperties(this, cat);
-        return cat;
-    }
-    public Cat toCatWithAdoption(){
-        Cat cat = new Cat();
-        BeanUtils.copyProperties(this, cat);
-        cat.setAdopterNif(this.getAdopterEntity().getNif());
+        if (this.adopterEntity != null) {
+            cat.setAdopterNif(this.adopterEntity.getNif());
+        }else if(this.colonyEntity != null){
+            cat.setColonyRegistry(this.colonyEntity.getRegistry());
+        }
         return cat;
     }
 }

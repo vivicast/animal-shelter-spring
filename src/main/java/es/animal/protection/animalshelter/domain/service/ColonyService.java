@@ -17,7 +17,7 @@ public class ColonyService {
         this.colonyPersistence = colonyPersistence;
     }
 
-    public Mono<Colony> create(Colony colony){
+    public Mono<Colony> create(Colony colony) {
         return this.colonyPersistence.create(colony);
     }
 

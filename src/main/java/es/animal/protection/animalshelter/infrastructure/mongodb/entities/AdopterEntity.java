@@ -24,11 +24,11 @@ public class AdopterEntity {
     private String address;
     private String birthDay;
 
-    public AdopterEntity (Adopter adopter){
+    public AdopterEntity(Adopter adopter) {
         BeanUtils.copyProperties(adopter, this);
     }
 
-    public Adopter toAdopter(){
+    public Adopter toAdopter() {
         Adopter adopter = new Adopter();
         BeanUtils.copyProperties(this, adopter);
         return adopter;

@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface AdopterReactive extends ReactiveSortingRepository <AdopterEntity, String>{
+public interface AdopterReactive extends ReactiveSortingRepository<AdopterEntity, String> {
     Mono<AdopterEntity> readByNif(String nif);
 
     @Query("{$and:[" // allow NULL in NIF

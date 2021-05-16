@@ -68,4 +68,11 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
         return this.adopterReactive.findAll()
                 .map(AdopterEntity::toAdopter);
     }
+
+    @Override
+    public Flux<String> findByNifNullSafe(String nif) {
+        return this.adopterReactive.findByNifNullSafe(nif)
+                .map(AdopterEntity::getNif);
+    }
+
 }

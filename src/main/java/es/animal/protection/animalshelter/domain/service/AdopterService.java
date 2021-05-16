@@ -36,4 +36,8 @@ public class AdopterService {
     public Flux<Adopter> findAll() {
         return this.adopterPersistence.findAll();
     }
+
+    public Flux<String> findByNifNullSafe(String nif) {
+        return this.adopterPersistence.findByNifNullSafe(nif);
+    }
 }

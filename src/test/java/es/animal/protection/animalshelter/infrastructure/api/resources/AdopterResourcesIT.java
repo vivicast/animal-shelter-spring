@@ -54,7 +54,7 @@ class AdopterResourcesIT {
                 .expectStatus().isOk();
         this.webTestClient
                 .get()
-                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF, "0000008C")
+                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF_VAL, "0000008C")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Adopter.class)
@@ -80,7 +80,7 @@ class AdopterResourcesIT {
 
         this.webTestClient
                 .put()
-                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF, "0000007C")
+                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF_VAL, "0000007C")
                 .body(Mono.just(adopterUpdate), Adopter.class)
                 .exchange()
                 .expectStatus().isOk()
@@ -102,13 +102,13 @@ class AdopterResourcesIT {
 
         this.webTestClient
                 .delete()
-                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF, "0000006C")
+                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF_VAL, "0000006C")
                 .exchange()
                 .expectStatus().isOk();
 
         this.webTestClient
                 .get()
-                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF, "0000006C")
+                .uri(AdopterResource.ADOPTERS + AdopterResource.NIF_VAL, "0000006C")
                 .exchange()
                 .expectStatus().isNotFound();
 

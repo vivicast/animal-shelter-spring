@@ -186,7 +186,7 @@ class CatResourcesIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        Cat catUpdate = Cat.builder().chip(8).name("Fenix").admissionDate("2021-01-02").sociable(true).nifAdopter("5555").build();
+        Cat catUpdate = Cat.builder().chip(8).name("Fenix").admissionDate("2021-01-02").sociable(true).adopterNif("5555").build();
 
         this.webTestClient
                 .put()
@@ -196,7 +196,7 @@ class CatResourcesIT {
                 .expectStatus().isOk()
                 .expectBody(Cat.class)
                 .value(returnCat -> {
-                    assertThat("5555").isEqualTo(returnCat.getNifAdopter());
+                    assertThat("5555").isEqualTo(returnCat.getAdopterNif());
                 });
 
 

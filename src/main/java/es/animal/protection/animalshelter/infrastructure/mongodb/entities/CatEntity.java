@@ -47,7 +47,7 @@ public class CatEntity {
     public Cat toCatWithAdoption(){
         Cat cat = new Cat();
         BeanUtils.copyProperties(this, cat);
-        cat.setNifAdopter(this.getAdopterEntity().getNif());
+        cat.setAdopterNif(this.getAdopterEntity().getNif());
         return cat;
     }
 }

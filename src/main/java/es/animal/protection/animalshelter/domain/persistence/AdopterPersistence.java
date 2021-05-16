@@ -13,4 +13,5 @@ public interface AdopterPersistence {
     Mono<Adopter> updateByNif(String nif, Adopter adopter);
     Mono<Void> deleteByNif(String nif);
     Flux<Adopter> findAll();
+    Flux<String> findByNifNullSafe(String nif);
 }

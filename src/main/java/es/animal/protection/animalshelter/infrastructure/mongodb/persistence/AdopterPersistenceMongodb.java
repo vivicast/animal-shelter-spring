@@ -32,21 +32,21 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
     private Mono<Void> assertAdopterNotExist(String nif) {
         return this.adopterReactive.readByNif(nif)
                 .flatMap(adopterEntity -> Mono.error(
-                        new ConflictException("Adopter with NIF "+ nif + " already exists ")
+                        new ConflictException("Adopter with NIF " + nif + " already exists ")
                 ));
     }
 
     @Override
     public Mono<Adopter> readByNif(String nif) {
         return this.adopterReactive.readByNif(nif)
-                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF "+ nif + " not found" )))
+                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF " + nif + " not found")))
                 .flatMap(adopterEntity -> Mono.just(adopterEntity.toAdopter()));
     }
 
     @Override
     public Mono<Adopter> updateByNif(String nif, Adopter adopter) {
         return this.adopterReactive.readByNif(nif)
-                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF "+ nif + " not found" )))
+                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF " + nif + " not found")))
                 .flatMap(adopterEntity -> {
                     AdopterEntity adopterEntityUpdate = new AdopterEntity();
                     BeanUtils.copyProperties(adopter, adopterEntityUpdate);
@@ -59,7 +59,7 @@ public class AdopterPersistenceMongodb implements AdopterPersistence {
     @Override
     public Mono<Void> deleteByNif(String nif) {
         return this.adopterReactive.readByNif(nif)
-                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF "+ nif + " not found" )))
+                .switchIfEmpty(Mono.error(new NotFoundException("Adopter with NIF " + nif + " not found")))
                 .flatMap(adopterEntity -> this.adopterReactive.delete(adopterEntity));
     }
 

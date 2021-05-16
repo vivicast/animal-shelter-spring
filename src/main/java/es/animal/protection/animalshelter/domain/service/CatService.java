@@ -17,7 +17,7 @@ public class CatService {
         this.catPersistence = catPersistence;
     }
 
-    public Mono<Cat> create(Cat cat){
+    public Mono<Cat> create(Cat cat) {
         return this.catPersistence.create(cat);
     }
 

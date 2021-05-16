@@ -24,11 +24,11 @@ public class ColonyEntity {
     private String phone;
     private String location;
 
-    public ColonyEntity(Colony colony){
+    public ColonyEntity(Colony colony) {
         BeanUtils.copyProperties(colony, this);
     }
 
-    public Colony toColony(){
+    public Colony toColony() {
         Colony colony = new Colony();
         BeanUtils.copyProperties(this, colony);
         return colony;

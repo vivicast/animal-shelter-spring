@@ -6,7 +6,7 @@ import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface ColonyReactive extends ReactiveSortingRepository <ColonyEntity, String>{
+public interface ColonyReactive extends ReactiveSortingRepository<ColonyEntity, String> {
     Mono<ColonyEntity> readByRegistry(Integer registryNumber);
 
     @Query("{$and:[" // allow NULL: all elements

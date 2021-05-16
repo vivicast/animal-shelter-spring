@@ -4,7 +4,6 @@ import es.animal.protection.animalshelter.domain.exceptions.ConflictException;
 import es.animal.protection.animalshelter.domain.exceptions.NotFoundException;
 import es.animal.protection.animalshelter.domain.model.Cat;
 import es.animal.protection.animalshelter.domain.persistence.CatPersistence;
-import es.animal.protection.animalshelter.infrastructure.api.dtos.AdoptionDto;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.AdopterReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.daos.CatReactive;
 import es.animal.protection.animalshelter.infrastructure.mongodb.entities.CatEntity;
@@ -43,21 +42,17 @@ public class CatPersistenceMongodb implements CatPersistence {
 
     @Override
     public Mono<Cat> update(Integer chip, Cat cat) {
-        return this.assertCatExist(chip)
-                .flatMap(catEntity -> {
-                    CatEntity catEntityUpdate = new CatEntity();
-                    BeanUtils.copyProperties(cat, catEntityUpdate);
-                    catEntityUpdate.setId(catEntity.getId());
-                    return this.catReactive.save(catEntityUpdate);
-                })
-                .flatMap(catEnt -> Mono.just(catEnt.toCat()));
+        if (cat.getNifAdopter() == null) {
+            return this.updateCat(chip, cat);
+        } else {
+            return this.createAdoption(chip, cat);
+        }
     }
 
     @Override
     public Mono<Void> delete(Integer chip) {
         return this.assertCatExist(chip)
                 .flatMap(catEntity -> this.catReactive.delete(catEntity));
-
     }
 
     @Override
@@ -71,14 +66,21 @@ public class CatPersistenceMongodb implements CatPersistence {
         }
     }
 
-    @Override
-    public Mono<Cat> createAdoption(AdoptionDto adoptionDto) {
+    private Mono<Cat> updateCat(Integer chip, Cat cat) {
+        Mono<CatEntity> catEntityMono = this.assertCatExist(chip);
+        return catEntityMono.flatMap(catEntity -> {
+            CatEntity catEntityUpdate = new CatEntity();
+            BeanUtils.copyProperties(cat, catEntityUpdate);
+            catEntityUpdate.setId(catEntity.getId());
+            return this.catReactive.save(catEntityUpdate);
+        }).flatMap(catEnt -> Mono.just(catEnt.toCat()));
+    }
 
-        Mono<CatEntity> catEntityMono = this.assertCatExist(adoptionDto.getChip());
-
-        return this.adopterReactive.readByNif(adoptionDto.getNifAdopter())
+    private Mono<Cat> createAdoption(Integer chip, Cat cat) {
+        Mono<CatEntity> catEntityMono = this.assertCatExist(chip);
+        return this.adopterReactive.readByNif(cat.getNifAdopter())
                 .switchIfEmpty(Mono.error(
-                        new NotFoundException("No exist adopter with nif: " + adoptionDto.getNifAdopter())
+                        new NotFoundException("No exist adopter with nif: " + cat.getNifAdopter())
                 ))
                 .flatMap(adopterEntity -> {
                     return catEntityMono.map(catEntity -> {
@@ -88,7 +90,7 @@ public class CatPersistenceMongodb implements CatPersistence {
                     });
                 })
                 .flatMap(catEntityUpdate -> this.catReactive.save(catEntityUpdate))
-                .flatMap(catEntity -> Mono.just(catEntity.toCatWithAdoption()));
+                .flatMap(catEntitySaved -> Mono.just(catEntitySaved.toCatWithAdoption()));
     }
 
     private Mono<Void> assertCatNotExist(Integer chip) {

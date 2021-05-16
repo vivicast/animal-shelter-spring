@@ -37,7 +37,6 @@ public class CatEntity {
     public CatEntity(CatEntity catEntity, AdopterEntity adopterEntity){
         BeanUtils.copyProperties(adopterEntity, this.adopterEntity);
         BeanUtils.copyProperties(catEntity, this);
-        //this.id = catEntity.getId();
     }
 
     public Cat toCat(){

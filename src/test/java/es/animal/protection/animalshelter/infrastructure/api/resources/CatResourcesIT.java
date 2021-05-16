@@ -2,7 +2,6 @@ package es.animal.protection.animalshelter.infrastructure.api.resources;
 
 import es.animal.protection.animalshelter.domain.model.Adopter;
 import es.animal.protection.animalshelter.domain.model.Cat;
-import es.animal.protection.animalshelter.infrastructure.api.dtos.AdoptionDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -187,18 +186,20 @@ class CatResourcesIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        AdoptionDto adoptionDto = AdoptionDto.builder().chip(8).nifAdopter("5555").build();
+        Cat catUpdate = Cat.builder().chip(8).name("Fenix").admissionDate("2021-01-02").sociable(true).nifAdopter("5555").build();
+
         this.webTestClient
-                .post()
-                .uri(CatResource.CATS+CatResource.ADOPTION)
-                .body(Mono.just(adoptionDto), AdoptionDto.class)
+                .put()
+                .uri(CatResource.CATS+ CatResource.CHIP, "8")
+                .body(Mono.just(catUpdate), Cat.class)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Cat.class)
                 .value(returnCat -> {
                     assertThat("5555").isEqualTo(returnCat.getNifAdopter());
-                    assertNotNull(returnCat.getDepartureDate());
                 });
+
+
 
     }
 

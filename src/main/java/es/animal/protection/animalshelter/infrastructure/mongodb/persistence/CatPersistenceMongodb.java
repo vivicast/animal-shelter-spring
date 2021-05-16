@@ -44,9 +44,9 @@ public class CatPersistenceMongodb implements CatPersistence {
     @Override
     public Mono<Cat> update(Integer chip, Cat cat) {
         LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()");
-        LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()" + cat.getNifAdopter());
+        LogManager.getLogger(this.getClass()).warn("AnimalShelter:update()" + cat.getAdopterNif());
 
-        if (cat.getNifAdopter() == null) {
+        if (cat.getAdopterNif() == null) {
             LogManager.getLogger(this.getClass()).warn("AnimalShelter: getNifAdopter is Empty");
             return this.updateCat(chip, cat);
         } else {
@@ -84,9 +84,9 @@ public class CatPersistenceMongodb implements CatPersistence {
 
     private Mono<Cat> createAdoption(Integer chip, Cat cat) {
         Mono<CatEntity> catEntityMono = this.assertCatExist(chip);
-        return this.adopterReactive.readByNif(cat.getNifAdopter())
+        return this.adopterReactive.readByNif(cat.getAdopterNif())
                 .switchIfEmpty(Mono.error(
-                        new NotFoundException("No exist adopter with nif: " + cat.getNifAdopter())
+                        new NotFoundException("No exist adopter with nif: " + cat.getAdopterNif())
                 ))
                 .flatMap(adopterEntity -> {
                     return catEntityMono.map(catEntityActual -> {

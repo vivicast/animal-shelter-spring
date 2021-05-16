@@ -24,7 +24,6 @@ public class Cat {
     private String admissionDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String departureDate;
-    private String nifAdopter;
-
+    private String adopterNif;
 
 }

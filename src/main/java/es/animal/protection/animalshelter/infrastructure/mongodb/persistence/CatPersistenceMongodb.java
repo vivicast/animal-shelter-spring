@@ -43,7 +43,6 @@ public class CatPersistenceMongodb implements CatPersistence {
 
     @Override
     public Mono<Cat> update(Integer chip, Cat cat) {
-
         if (cat.getAdopterNif() != null) {
             return this.createAdoption(chip, cat);
         } else if (cat.getColonyRegistry() != null) {
@@ -79,6 +78,7 @@ public class CatPersistenceMongodb implements CatPersistence {
                     return this.catReactive.save(catEntityUpdate);
                 }).flatMap(catEnt -> Mono.just(catEnt.toCat()));
     }
+
     private Mono<Cat> assignColony(Integer chip, Cat cat) {
         Mono<CatEntity> catEntityMono = this.assertCatExist(chip);
         return this.colonyReactive.readByRegistry(cat.getColonyRegistry())

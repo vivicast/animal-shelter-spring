@@ -10,11 +10,13 @@ public interface ColonyPersistence {
 
     Mono<Colony> create(Colony colony);
 
-    Mono<Colony> readByRegistry(Integer registry);
+    Mono<Colony> readByRegistry(String registry);
 
-    Mono<Colony> updateByRegistry(Integer registry, Colony colony);
+    Mono<Colony> updateByRegistry(String registry, Colony colony);
 
-    Mono<Void> deleteByRegistry(Integer registry);
+    Mono<Void> deleteByRegistry(String registry);
 
     Flux<Colony> findByManagerAndLocationNullSafe(String manager, String location);
+
+    Flux<String> findByRegistryNullSafe(String registry);
 }

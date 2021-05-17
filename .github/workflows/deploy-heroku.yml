@@ -1,6 +1,7 @@
 name: Deploy Heroku
 
-push:
+on:
+  push:
     branches:
       - master
 

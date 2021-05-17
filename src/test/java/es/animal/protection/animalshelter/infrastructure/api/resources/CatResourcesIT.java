@@ -213,7 +213,7 @@ class CatResourcesIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        Colony colony = Colony.builder().manager("Marth").location("Av. Sol").registry(007).build();
+        Colony colony = Colony.builder().manager("Marth").location("Av. Sol").registry("007").build();
         this.webTestClient
                 .post()
                 .uri(ColonyResource.COLONIES)
@@ -221,7 +221,7 @@ class CatResourcesIT {
                 .exchange()
                 .expectStatus().isOk();
 
-        Cat catUpdate = Cat.builder().chip(9).name("Bob").admissionDate("2021-01-02").sociable(false).departureDate("2021-05-17").colonyRegistry(007).build();
+        Cat catUpdate = Cat.builder().chip(9).name("Bob").admissionDate("2021-01-02").sociable(false).departureDate("2021-05-17").colonyRegistry("007").build();
 
         this.webTestClient
                 .put()

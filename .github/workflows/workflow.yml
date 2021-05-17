@@ -1,6 +1,10 @@
 name: Build and test of Animal-Shelter application
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'release-*'
 
 jobs:
   build:

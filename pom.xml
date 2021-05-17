@@ -10,7 +10,7 @@
     </parent>
     <groupId>es.animal.protection</groupId>
     <artifactId>animal-shelter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-RELEASE</version>
     <name>animal-shelter</name>
     <description>Animal Shelter application</description>
     <properties>

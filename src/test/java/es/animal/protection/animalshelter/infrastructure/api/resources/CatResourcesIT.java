@@ -5,18 +5,14 @@ import es.animal.protection.animalshelter.domain.model.Cat;
 import es.animal.protection.animalshelter.domain.model.Colony;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-@AutoConfigureWebTestClient
+@RestTestConfig
 class CatResourcesIT {
 
     @Autowired
@@ -231,7 +227,7 @@ class CatResourcesIT {
                 .expectStatus().isOk()
                 .expectBody(Cat.class)
                 .value(returnCat -> {
-                    assertThat(007).isEqualTo(returnCat.getColonyRegistry());
+                    assertThat("007").isEqualTo(returnCat.getColonyRegistry());
                 });
 
 
